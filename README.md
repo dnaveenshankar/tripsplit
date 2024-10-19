@@ -14,7 +14,7 @@ TripSplit is an expense management application designed to help groups of friend
 
 1. Clone the repository:
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/dnaveenshankar/tripsplit
    cd TripSplit
    ```
 2. Set up the database using the provided SQL scripts (if any). Update the `db_connection.php` file with your database credentials.
