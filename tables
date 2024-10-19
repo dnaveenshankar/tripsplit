@@ -1,0 +1,67 @@
+CREATE DATABASE tripsplit;
+
+USE tripsplit;
+
+CREATE TABLE users (
+    id INT(11) AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    username VARCHAR(50) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE trips (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    trip_name VARCHAR(255) NOT NULL,
+    date_from DATE NOT NULL,
+    date_to DATE NOT NULL,
+    number_of_persons INT NOT NULL,
+    status ENUM('on', 'off') DEFAULT 'on',
+    created_by VARCHAR(255) NOT NULL 
+);
+
+CREATE TABLE participants (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    trip_id INT NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    username VARCHAR(255),
+    FOREIGN KEY (trip_id) REFERENCES trips(id) ON DELETE CASCADE
+);
+
+CREATE TABLE expenses (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    trip_id INT NOT NULL,
+    expense_type VARCHAR(50) NOT NULL,
+    amount DECIMAL(10, 2) NOT NULL,
+    created_by VARCHAR(100) NOT NULL,
+    paid_by VARCHAR(100) NOT NULL,
+    FOREIGN KEY (trip_id) REFERENCES trips(id) ON DELETE CASCADE
+);
+
+CREATE TABLE expense_shares (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    expense_id INT NOT NULL,
+    participant_name VARCHAR(255) NOT NULL,
+    share DECIMAL(10, 2) NOT NULL,
+    FOREIGN KEY (expense_id) REFERENCES expenses(id) ON DELETE CASCADE
+);
+
+CREATE TABLE settlements (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    trip_id INT NOT NULL,
+    participant_name VARCHAR(255) NOT NULL,
+    total_paid DECIMAL(10, 2) NOT NULL,
+    share DECIMAL(10, 2) NOT NULL,
+    to_return DECIMAL(10, 2) NOT NULL,
+    status ENUM('settled', 'not settled') DEFAULT 'not settled',
+    FOREIGN KEY (trip_id) REFERENCES trips(id) ON DELETE CASCADE
+);
+
+CREATE TABLE settlements (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    trip_id INT NOT NULL,
+    participant_name VARCHAR(255) NOT NULL,
+    to_pay DECIMAL(10, 2) NOT NULL DEFAULT 0,
+    to_return DECIMAL(10, 2) NOT NULL DEFAULT 0,
+    status ENUM('settled', 'not settled') DEFAULT 'not settled',
+    FOREIGN KEY (trip_id) REFERENCES trips(id) ON DELETE CASCADE
+);
